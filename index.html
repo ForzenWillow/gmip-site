@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GMIP — Accessible in-store navigation for supermarkets</title>
+  <meta name="description" content="GMIP turns your supermarket layout into audio, haptic and visual guidance so visually impaired and elderly customers can shop independently. Free for shoppers, funded by partner stores.">
+  <meta name="theme-color" content="#6E0010">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Reusable SVG symbols -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 48 48">
+      <rect width="48" height="48" rx="13" fill="#FFE0E3"/>
+      <path d="M24 9c-6.1 0-11 4.8-11 10.8 0 7.7 9.1 17 10.1 18a1.3 1.3 0 0 0 1.8 0c1-1 10.1-10.3 10.1-18C35 13.8 30.1 9 24 9Z" fill="#6E0010"/>
+      <path d="M20.2 17.6a5.4 5.4 0 0 1 0 6.4M23.6 15a9.4 9.4 0 0 1 0 11.6M27 12.6a13 13 0 0 1 0 16.4" stroke="#FFE0E3" stroke-width="2" stroke-linecap="round" fill="none" transform="translate(-3 -1)"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 8.5v7l5.5-3.5z" fill="currentColor"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21m-3.5 0h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-vibrate" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 8v8M21 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.5 5.5 4h13L20 9.5M4 9.5h16M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12.5V20h13v-7.5M10 20v-4.5h4V20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.3A4.2 4.2 0 0 1 12 8.3a4.2 4.2 0 0 1 7.5 2.4C19.5 16.4 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m3 12.5 9 5 9-5M3 16.5l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2.5 2.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.8 12 2.2 2.2 4.3-4.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M14 4H6v16h8M10 12h10m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.3A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z" fill="currentColor"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.6L4 8.5M4 13a8 8 0 0 0 14.3 4.6l1.7-2.1M4 4v4.5h4.5M20 20v-4.5h-4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4m-4.5 4.5L12 4l4.5 4.5M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Zm0 0v14m6-12v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M14 4.5c3-1.3 5.5-.5 5.5-.5s.8 2.5-.5 5.5L13 16l-5-5 6-6.5ZM8 11l-3.5.5L3 14l4 .5M13 16l-.5 3.5L10 21l-.5-4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/><circle cx="15.5" cy="8.5" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart-outline" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.3A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8L12 3Z" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.4 4.2-2 1.4a11 11 0 0 0 6.3 6.3l1.4-2 4.2 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="GMIP home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-text">
+          <span class="brand-name">GMIP</span>
+          <span class="brand-tag">Grocery Map for Impaired People</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <ul>
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#solution">Solution</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#benefits">For stores</a></li>
+          <li><a href="#partnership">Partnership</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-sm btn-outline-light" href="#" data-prototype-link>
+          <svg aria-hidden="true"><use href="#i-play"/></svg> Try the prototype
+        </a>
+        <a class="btn btn-sm btn-light" href="#contact">
+          Partner with us <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+        <svg aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">
+            <span class="eyebrow-dot"><svg aria-hidden="true"><use href="#i-store"/></svg></span>
+            In-store accessibility for supermarkets
+          </span>
+
+          <h1 id="hero-title">
+            Every aisle.
+            <span class="accent">Every shopper.</span>
+          </h1>
+
+          <p class="hero-lead">
+            GMIP turns your store layout into <strong>audio, haptic and visual guidance</strong>,
+            so visually impaired and elderly customers can find what they need on their own —
+            and choose your store again.
+          </p>
+
+          <div class="hero-ctas">
+            <a class="btn btn-lg btn-light" href="#contact">
+              Become a partner store <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+            </a>
+            <a class="btn btn-lg btn-outline-light" href="#" data-prototype-link>
+              <svg aria-hidden="true"><use href="#i-play"/></svg> Try the prototype
+            </a>
+          </div>
+
+          <ul class="hero-checks">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg> Free for your shoppers</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg> Built on your store layout</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg> Can be co-funded by accessibility grants</li>
+          </ul>
+        </div>
+
+        <!-- Product preview: illustrative mock of the shopper app -->
+        <div class="hero-visual" role="img" aria-label="Preview of the GMIP shopper app: it guides the user to gluten-free spaghetti in aisle 7, shows the route on a store map and a shopping list with two items already collected.">
+          <div class="phone-wrap">
+          <div class="phone" aria-hidden="true">
+            <div class="phone-screen">
+              <div class="phone-notch"></div>
+              <div class="phone-status">
+                <span>9:41</span>
+                <span class="icons">
+                  <span style="width:3px;height:6px"></span><span style="width:3px;height:8px"></span><span style="width:3px;height:10px"></span>
+                  <span style="width:20px;height:10px;border-radius:3px;margin-left:4px"></span>
+                </span>
+              </div>
+
+              <div class="app-bar">
+                <svg class="brand-mark"><use href="#logo"/></svg>
+                <div>
+                  <div class="app-bar-title">GMIP</div>
+                  <div class="app-bar-sub">Partner store · Mikkeli</div>
+                </div>
+                <span class="app-badge">GUIDING</span>
+              </div>
+
+              <div class="app-body">
+                <div class="guide-card">
+                  <div class="guide-arrow">
+                    <svg viewBox="0 0 24 24"><path d="M12 20V6m-6 6 6-6 6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div>
+                    <div class="guide-step">Item 3 of 4</div>
+                    <div class="guide-text">Go straight 12 m to Aisle 7</div>
+                    <div class="guide-meta">Gluten-free spaghetti · left shelf</div>
+                  </div>
+                </div>
+
+                <div class="mini-map">
+                  <svg viewBox="0 0 240 120" class="route-svg">
+                    <defs>
+                      <mask id="route-mask" maskUnits="userSpaceOnUse">
+                        <path d="M30 104 H112 V92 H148 V60" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">
+                          <animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;.75;1" dur="5s" repeatCount="indefinite"/>
+                        </path>
+                      </mask>
+                    </defs>
+                    <rect x="1" y="1" width="238" height="118" rx="10" fill="#FFF4F5" stroke="#EBD9DC"/>
+                    <!-- aisles -->
+                    <g fill="#F3D3D7">
+                      <rect x="22" y="18" width="14" height="64" rx="3"/>
+                      <rect x="56" y="18" width="14" height="64" rx="3"/>
+                      <rect x="90" y="18" width="14" height="64" rx="3"/>
+                      <rect x="124" y="18" width="14" height="64" rx="3"/>
+                      <rect x="158" y="18" width="14" height="64" rx="3"/>
+                      <rect x="192" y="18" width="30" height="28" rx="3"/>
+                    </g>
+                    <rect x="158" y="18" width="14" height="64" rx="3" fill="#A33542"/>
+                    <text x="165" y="54" font-family="Inter, sans-serif" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">7</text>
+                    <!-- checkout -->
+                    <rect x="192" y="96" width="34" height="12" rx="3" fill="#EBD9DC"/>
+                    <!-- route -->
+                    <path d="M30 104 H112 V92 H148 V60" fill="none" stroke="#6E0010" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 6" mask="url(#route-mask)"/>
+                    <!-- done markers -->
+                    <circle cx="47" cy="40" r="5" fill="#1F7A4D"/><circle cx="114" cy="30" r="5" fill="#1F7A4D"/>
+                    <!-- target -->
+                    <circle cx="148" cy="54" r="7" fill="#fff" stroke="#6E0010" stroke-width="3"/>
+                    <!-- user -->
+                    <g>
+                      <circle r="10" fill="#6E0010" opacity=".15"/>
+                      <circle r="5.5" fill="#6E0010" stroke="#fff" stroke-width="2"/>
+                      <animateMotion path="M30 104 H112 V92 H148 V60" dur="5s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.75;1" calcMode="linear"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <div class="list-card">
+                  <div class="list-title"><span>Shopping list</span><span>2 of 4 found</span></div>
+                  <div class="list-item done"><span class="tick"><svg viewBox="0 0 24 24"><path d="m6 12.5 4 4 8-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Tomatoes<span class="aisle">A2</span></div>
+                  <div class="list-item done"><span class="tick"><svg viewBox="0 0 24 24"><path d="m6 12.5 4 4 8-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Olive oil<span class="aisle">A4</span></div>
+                  <div class="list-item current"><span class="tick"></span>Gluten-free spaghetti<span class="aisle">A7</span></div>
+                </div>
+
+                <div class="voice-btn"><svg><use href="#i-mic"/></svg></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="float-card fc-haptic" aria-hidden="true">
+            <span class="fc-icon"><svg><use href="#i-vibrate"/></svg></span>
+            <span>Haptic arrival cue<small>Phone vibrates at the shelf</small></span>
+          </div>
+          <div class="float-card fc-audio" aria-hidden="true">
+            <span class="fc-icon"><svg><use href="#i-sound"/></svg></span>
+            <span>“Turn left in 3 steps”<small>Step-by-step audio</small></span>
+          </div>
+          <div class="float-card fc-store" aria-hidden="true">
+            <span class="fc-icon"><svg><use href="#i-route"/></svg></span>
+            <span>Shortest route planned<small>Rerouted if off course</small></span>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TRUST STRIP ================= -->
+    <section class="trust" aria-label="Key facts">
+      <div class="container trust-inner">
+        <div class="trust-item">
+          <svg aria-hidden="true"><use href="#i-gift"/></svg>
+          <div><strong>Free for shoppers</strong><span>Stores fund the integration</span></div>
+        </div>
+        <div class="trust-item">
+          <svg aria-hidden="true"><use href="#i-layers"/></svg>
+          <div><strong>Audio · haptic · visual</strong><span>Three guidance modes in one app</span></div>
+        </div>
+        <div class="trust-item">
+          <svg aria-hidden="true"><use href="#i-route"/></svg>
+          <div><strong>Automatic rerouting</strong><span>Shoppers never stay lost</span></div>
+        </div>
+        <div class="trust-item">
+          <svg aria-hidden="true"><use href="#i-shield"/></svg>
+          <div><strong>Privacy by design</strong><span>Built around GDPR requirements</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PROBLEM ================= -->
+    <section class="section section-blush" id="problem" aria-labelledby="problem-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">The problem</span>
+          <h2 class="section-title" id="problem-title">When shoppers can’t find it, <span class="soft">your store loses.</span></h2>
+          <p class="section-lead">
+            For visually impaired and elderly customers, an unfamiliar layout turns a routine shop into a stressful, time-consuming task.
+            That cost lands on the shopper, your staff and your bottom line.
+          </p>
+        </div>
+
+        <div class="friction-grid">
+          <article class="friction-card">
+            <span class="friction-num">01</span>
+            <h3>Lower satisfaction from wasted time</h3>
+            <p>Shoppers walk past the right aisle again and again, struggle to read packaging and leave tired and anxious.</p>
+            <div class="impact"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Fewer completed baskets, weaker loyalty</div>
+          </article>
+          <article class="friction-card">
+            <span class="friction-num">02</span>
+            <h3>Customers avoid unfamiliar stores</h3>
+            <p>If a store is hard to navigate, people stick with the one they already know — or stop shopping in person at all.</p>
+            <div class="impact"><svg aria-hidden="true"><use href="#i-arrow"/></svg>New customers lost to competitors</div>
+          </article>
+          <article class="friction-card">
+            <span class="friction-num">03</span>
+            <h3>Staff are pulled off the floor</h3>
+            <p>Every “where can I find…?” interrupts restocking and other essential tasks, at a time when stores are short of people.</p>
+            <div class="impact"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Lower productivity, slower restocking</div>
+          </article>
+        </div>
+
+        <!-- Persona: Ahmed before / after -->
+        <div class="journey">
+          <aside class="persona" aria-label="Persona">
+            <div class="persona-avatar" aria-hidden="true">
+              <svg viewBox="0 0 84 84">
+                <circle cx="42" cy="42" r="42" fill="#FFE0E3"/>
+                <path d="M14 80c3-15 14-23 28-23s25 8 28 23" fill="#A33542"/>
+                <circle cx="42" cy="34" r="15" fill="#C98A72"/>
+                <path d="M27 31c0-10 7-15 15-15s15 5 15 15c-3-4-9-6-15-6s-12 2-15 6Z" fill="#2B1A16"/>
+                <rect x="29" y="31" width="11" height="7" rx="3" fill="#1F1416"/><rect x="44" y="31" width="11" height="7" rx="3" fill="#1F1416"/>
+                <path d="M40 34h4" stroke="#1F1416" stroke-width="2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="persona-label">Primary user</div>
+              <div class="persona-name">Ahmed</div>
+            </div>
+            <p>Visually impaired grocery shopper. His usual helper isn’t available today, so he shops alone.</p>
+            <div class="persona-goal"><strong>Today’s goal</strong>Ingredients for his favourite pasta — including gluten-free spaghetti.</div>
+          </aside>
+
+          <div class="compare">
+            <div class="compare-col is-before">
+              <span class="compare-tag before">Today</span>
+              <div class="compare-time"><span class="big">60+</span><span class="unit">minutes in store</span></div>
+              <div class="time-bar" role="img" aria-label="Time breakdown: 30 minutes searching aisles, 15 minutes searching the shelf, 15 minutes paying and leaving">
+                <span style="width:50%;background:#9A8A8D"></span><span style="width:25%;background:#BFB1B4"></span><span style="width:25%;background:#DCD0D2"></span>
+              </div>
+              <div class="time-legend" aria-hidden="true">
+                <span><i style="background:#9A8A8D"></i>Finding aisles 30m</span>
+                <span><i style="background:#BFB1B4"></i>At the shelf 15m</span>
+                <span><i style="background:#DCD0D2"></i>Checkout 15m</span>
+              </div>
+              <ul class="compare-list">
+                <li><svg aria-hidden="true"><use href="#i-x"/></svg>Walks past the pasta aisle three times without knowing</li>
+                <li><svg aria-hidden="true"><use href="#i-x"/></svg>Needs a busy employee to point him in the right direction</li>
+                <li><svg aria-hidden="true"><use href="#i-x"/></svg>Can’t read the packaging to find the gluten-free option</li>
+              </ul>
+              <div class="compare-outcome"><svg aria-hidden="true"><use href="#i-door"/></svg>“Next time I’ll go to a more accessible supermarket.”</div>
+            </div>
+
+            <div class="compare-col is-after">
+              <span class="compare-tag after">With GMIP</span>
+              <div class="compare-time"><span class="big">20</span><span class="unit">minutes in store</span></div>
+              <div class="time-bar" role="img" aria-label="Total time 20 minutes, a third of the time before">
+                <span style="width:33.3%;background:var(--maroon-700)"></span>
+              </div>
+              <div class="time-legend" aria-hidden="true"><span><i style="background:var(--maroon-700)"></i>Whole trip, guided start to exit</span></div>
+              <ul class="compare-list">
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Says his list once — GMIP plans the shortest route</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Audio directions and a vibration at each correct shelf</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Guided to the nearest checkout and exit, no help needed</li>
+              </ul>
+              <div class="compare-outcome"><svg aria-hidden="true"><use href="#i-heart"/></svg>“I did it on my own. I’m coming back here.”</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SOLUTION ================= -->
+    <section class="section" id="solution" aria-labelledby="solution-title">
+      <div class="container">
+        <div class="solution-grid">
+          <div>
+            <div class="section-head" style="margin-bottom:0">
+              <span class="kicker">Our solution</span>
+              <h2 class="section-title" id="solution-title">Your store map, <span class="soft">made accessible.</span></h2>
+              <p class="section-lead">
+                GMIP turns your floor plan and product locations into guidance your customers can hear, feel and see.
+                The app adapts to each shopper’s level of visual impairment.
+              </p>
+            </div>
+
+            <div class="modes">
+              <div class="mode">
+                <span class="mode-icon"><svg aria-hidden="true"><use href="#i-sound"/></svg></span>
+                <div><h3>Audio guidance</h3><p>Step-by-step spoken directions, from the entrance to each product and on to the checkout.</p></div>
+              </div>
+              <div class="mode">
+                <span class="mode-icon"><svg aria-hidden="true"><use href="#i-vibrate"/></svg></span>
+                <div><h3>Haptic feedback</h3><p>A clear vibration tells the shopper they’ve reached the right shelf. No need to look at the screen.</p></div>
+              </div>
+              <div class="mode">
+                <span class="mode-icon"><svg aria-hidden="true"><use href="#i-eye"/></svg></span>
+                <div><h3>Visual maps</h3><p>High-contrast maps with large text for shoppers with partial sight and older customers.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Adaptive interface visual -->
+          <div class="adaptive" role="img" aria-label="Three app layouts: a voice-first screen with one large red button for heavily impaired users, a large-text map for medium impairment, and a standard map for slight impairment.">
+            <div class="adaptive-head" aria-hidden="true">
+              <strong>One app, three entry points</strong>
+              <span>Set once, and every visit opens in the shopper’s mode.</span>
+            </div>
+            <div class="screens" aria-hidden="true">
+              <div>
+                <div class="screen"><div class="screen-in">
+                  <div class="s-label">Voice-first</div>
+                  <div class="s-voice"><span><svg><use href="#i-mic"/></svg></span></div>
+                  <div class="s-text-big">Tap and say your list</div>
+                </div></div>
+                <div class="screen-cap">Heavy impairment<small>One big button</small></div>
+              </div>
+              <div>
+                <div class="screen"><div class="screen-in">
+                  <div class="s-label">Large map</div>
+                  <div class="s-text-big" style="font-size:1.05rem">Aisle 7 ↑ 12 m</div>
+                  <div class="s-map"><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" class="route-svg">
+                    <g fill="#F3D3D7"><rect x="12" y="12" width="14" height="60" rx="3"/><rect x="43" y="12" width="14" height="60" rx="3"/></g>
+                    <rect x="74" y="12" width="14" height="60" rx="3" fill="#A33542"/>
+                    <path d="M19 88 H66 V44" fill="none" stroke="#EBD9DC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 88 H66 V44" fill="none" stroke="#6E0010" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">
+                      <animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;.7;1" dur="5s" repeatCount="indefinite"/>
+                    </path>
+                    <circle cx="66" cy="40" r="6" fill="none" stroke="#A33542" stroke-width="2" opacity="0">
+                      <animate attributeName="r" values="6;6;14;14" keyTimes="0;.7;.95;1" dur="5s" repeatCount="indefinite"/>
+                      <animate attributeName="opacity" values="0;.7;0;0" keyTimes="0;.7;.95;1" dur="5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="66" cy="40" r="6" fill="#fff" stroke="#6E0010" stroke-width="4"/>
+                    <circle r="6" fill="#6E0010" stroke="#fff" stroke-width="2">
+                      <animateMotion path="M19 88 H66 V44" dur="5s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.7;1" calcMode="linear"/>
+                    </circle>
+                  </svg></div>
+                </div></div>
+                <div class="screen-cap">Medium impairment<small>Large, high-contrast map</small></div>
+              </div>
+              <div>
+                <div class="screen"><div class="screen-in">
+                  <div class="s-label">Standard map</div>
+                  <div class="s-map" style="flex:0 0 120px"><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" class="route-svg">
+                    <defs>
+                      <mask id="route-mask-std" maskUnits="userSpaceOnUse">
+                        <path d="M12 86 H75 V40" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">
+                          <animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;.7;1" dur="5s" begin="-2s" repeatCount="indefinite"/>
+                        </path>
+                      </mask>
+                    </defs>
+                    <g fill="#F3D3D7"><rect x="8" y="10" width="9" height="56" rx="2"/><rect x="26" y="10" width="9" height="56" rx="2"/><rect x="44" y="10" width="9" height="56" rx="2"/><rect x="62" y="10" width="9" height="56" rx="2"/></g>
+                    <rect x="80" y="10" width="9" height="56" rx="2" fill="#A33542"/>
+                    <path d="M12 86 H75 V40" fill="none" stroke="#6E0010" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round" mask="url(#route-mask-std)"/>
+                    <circle cx="75" cy="36" r="4" fill="none" stroke="#A33542" stroke-width="1.5" opacity="0">
+                      <animate attributeName="r" values="4;4;10;10" keyTimes="0;.7;.95;1" dur="5s" begin="-2s" repeatCount="indefinite"/>
+                      <animate attributeName="opacity" values="0;.7;0;0" keyTimes="0;.7;.95;1" dur="5s" begin="-2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="75" cy="36" r="3.5" fill="#fff" stroke="#6E0010" stroke-width="2"/>
+                    <circle r="4" fill="#6E0010" stroke="#fff" stroke-width="1.5">
+                      <animateMotion path="M12 86 H75 V40" dur="5s" begin="-2s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.7;1" calcMode="linear"/>
+                    </circle>
+                  </svg></div>
+                  <div class="s-row"></div><div class="s-row short"></div><div class="s-row"></div>
+                  <div class="s-btn" style="margin-top:auto"></div>
+                </div></div>
+                <div class="screen-cap">Slight impairment<small>Full map and list</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="capabilities">
+          <div class="cap"><svg aria-hidden="true"><use href="#i-search"/></svg><h4>Voice &amp; text search</h4><p>Shoppers say or type their list and GMIP finds every product in your store.</p></div>
+          <div class="cap"><svg aria-hidden="true"><use href="#i-route"/></svg><h4>Shortest route</h4><p>One efficient path through all items, instead of searching aisle by aisle.</p></div>
+          <div class="cap"><svg aria-hidden="true"><use href="#i-refresh"/></svg><h4>Automatic rerouting</h4><p>If a shopper goes off course, the route adjusts straight away.</p></div>
+          <div class="cap"><svg aria-hidden="true"><use href="#i-cart"/></svg><h4>Checkout &amp; exit</h4><p>After the last item, GMIP leads to the nearest checkout and then the exit.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS (for stores) ================= -->
+    <section class="section section-dark" id="how" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">How it works</span>
+          <h2 class="section-title" id="how-title">From floor plan <span class="soft">to guided store.</span></h2>
+          <p class="section-lead">Becoming a GMIP partner store takes four steps. We do the technical work; your team shares what it already knows about the store.</p>
+        </div>
+
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1<svg aria-hidden="true"><use href="#i-upload"/></svg></div>
+            <h3>Share your layout</h3>
+            <p>Send us your floor plan and product locations, straight from your existing planogram or inventory systems.</p>
+            <span class="step-tag">Your team</span>
+          </li>
+          <li class="step">
+            <div class="step-num">2<svg aria-hidden="true"><use href="#i-map"/></svg></div>
+            <h3>We build your digital map</h3>
+            <p>We map aisles, shelves, checkouts and exits, then set up the indoor positioning that suits your store.</p>
+            <span class="step-tag">GMIP team</span>
+          </li>
+          <li class="step">
+            <div class="step-num">3<svg aria-hidden="true"><use href="#i-rocket"/></svg></div>
+            <h3>Launch in store</h3>
+            <p>Your store appears in the GMIP app. We provide in-store signage, a short staff briefing, and outreach through accessibility organisations.</p>
+            <span class="step-tag">Together</span>
+          </li>
+          <li class="step">
+            <div class="step-num">4<svg aria-hidden="true"><use href="#i-refresh"/></svg></div>
+            <h3>Stay accurate &amp; improve</h3>
+            <p>Layout and product updates keep directions correct as stock moves. Shopper feedback and support are included.</p>
+            <span class="step-tag">Ongoing</span>
+          </li>
+        </ol>
+
+        <div class="steps-note">
+          <p><strong>No new app for your customers to pay for.</strong> Shoppers download GMIP for free, and it recognises your store automatically when they walk in.</p>
+          <a class="btn btn-light" href="#" data-prototype-link><svg aria-hidden="true"><use href="#i-play"/></svg> See the shopper experience</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BENEFITS FOR STORES ================= -->
+    <section class="section" id="benefits" aria-labelledby="benefits-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Benefits for your store</span>
+          <h2 class="section-title" id="benefits-title">Accessibility that <span class="soft">pays you back.</span></h2>
+          <p class="section-lead">When shoppers can find products easily, they buy more, need less help from staff and come back more often.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value" data-count="6" data-prefix="+" data-suffix="%">+6%</div>
+            <div class="stat-label">Higher average customer spend</div>
+            <div class="stat-src">Reported by Kesko after adding in-store navigation (<a href="https://navigine.com/blog/case-for-kesko/" target="_blank" rel="noopener">Navigine case study</a>)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" data-count="3" data-suffix="×">3×</div>
+            <div class="stat-label">Faster shopping trip</div>
+            <div class="stat-src">60+ min → 20 min in our target user journey</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">€0</div>
+            <div class="stat-label">Cost for your shoppers</div>
+            <div class="stat-src">Free to download and use</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" data-count="3">3</div>
+            <div class="stat-label">Ways to guide</div>
+            <div class="stat-src">Audio, haptic and visual, in one app</div>
+          </div>
+        </div>
+
+        <div class="benefit-grid">
+          <article class="benefit">
+            <span class="benefit-icon"><svg aria-hidden="true"><use href="#i-heart-outline"/></svg></span>
+            <div>
+              <h3>Win loyal customers</h3>
+              <p>Shoppers who can shop on their own in your store have a reason to choose it every time.</p>
+              <ul>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Reach visually impaired and elderly shoppers</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Make first visits easier for new customers</li>
+              </ul>
+            </div>
+          </article>
+          <article class="benefit">
+            <span class="benefit-icon"><svg aria-hidden="true"><use href="#i-users"/></svg></span>
+            <div>
+              <h3>Free up your staff</h3>
+              <p>Fewer “where can I find…?” questions means more time for restocking and real customer service.</p>
+              <ul>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Fewer interruptions on the shop floor</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Staff can help where people are needed most</li>
+              </ul>
+            </div>
+          </article>
+          <article class="benefit">
+            <span class="benefit-icon"><svg aria-hidden="true"><use href="#i-search"/></svg></span>
+            <div>
+              <h3>Better product discovery</h3>
+              <p>When every product can be found, more of your range gets bought, not just what sits at eye level.</p>
+              <ul>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Fewer missed items and abandoned lists</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Room for relevant product suggestions later</li>
+              </ul>
+            </div>
+          </article>
+          <article class="benefit">
+            <span class="benefit-icon"><svg aria-hidden="true"><use href="#i-award"/></svg></span>
+            <div>
+              <h3>Lead on accessibility</h3>
+              <p>Show a visible, practical commitment to inclusion that customers and communities notice.</p>
+              <ul>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Partner store badge in the app and in store</li>
+                <li><svg aria-hidden="true"><use href="#i-check"/></svg>Fits public accessibility and welfare programmes</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PARTNERSHIP MODEL ================= -->
+    <section class="section section-blush" id="partnership" aria-labelledby="partnership-title">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker">Partnership model</span>
+          <h2 class="section-title" id="partnership-title">Free for shoppers. <span class="soft">Simple for stores.</span></h2>
+          <p class="section-lead">GMIP is a B2B accessibility service. Partner stores fund the integration, and public accessibility funding can share the cost.</p>
+        </div>
+
+        <div class="model-grid">
+          <article class="model">
+            <span class="model-who">For shoppers</span>
+            <div class="model-price">Free</div>
+            <p class="model-sub">Always free for end users</p>
+            <ul>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Download from the App Store and Google Play</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Audio, haptic and visual guidance</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Works with VoiceOver and TalkBack</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Support and easy problem reporting</li>
+            </ul>
+          </article>
+
+          <article class="model featured">
+            <span class="model-badge">For your store</span>
+            <span class="model-who">Partner store</span>
+            <div class="model-price">Custom</div>
+            <p class="model-sub">Yearly licence that scales with store size</p>
+            <ul>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Digital map of your store and product locations</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Indoor positioning setup and testing</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Layout updates as your stock moves</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Staff briefing, signage and partner badge</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Dedicated support contact</li>
+            </ul>
+            <div class="model-cta"><a class="btn btn-light btn-lg" href="#contact">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+          </article>
+
+          <article class="model">
+            <span class="model-who">Public funding</span>
+            <div class="model-price">Co-funded</div>
+            <p class="model-sub">Grants can reduce your cost</p>
+            <ul>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Government accessibility initiatives</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Welfare programmes for disabled and elderly people</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Help from us with the application</li>
+            </ul>
+            <div class="model-cta"><a class="btn btn-outline btn-lg" href="#contact">Ask about funding</a></div>
+          </article>
+        </div>
+
+        <div class="cta-band">
+          <div>
+            <h2>Ready to make your store accessible?</h2>
+            <p>Book a 30-minute call. We’ll walk you through the app and show how your store layout would work with GMIP.</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-lg btn-light" href="#contact">Book a demo call <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-lg btn-outline-light" href="#" data-prototype-link><svg aria-hidden="true"><use href="#i-play"/></svg> Try the prototype</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TESTIMONIALS ================= -->
+    <section class="section" id="testimonials" aria-labelledby="testimonials-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">What people say</span>
+          <h2 class="section-title" id="testimonials-title">Trusted by stores. <span class="soft">Loved by shoppers.</span></h2>
+        </div>
+
+        <figure class="quote-feature" style="margin:0">
+          <div class="quote-main">
+            <div class="quote-mark" aria-hidden="true">“</div>
+            <blockquote>
+              Before GMIP, my team stopped what they were doing several times an hour to walk customers to an aisle.
+              Now our visually impaired regulars <strong>shop on their own</strong>, and staff can focus on keeping the shelves full.
+              It was <strong>simple to set up</strong>. We just shared our floor plan.
+            </blockquote>
+            <figcaption class="quote-person">
+              <span class="avatar" aria-hidden="true">LM</span>
+              <span><strong>Laura Mäkinen</strong><span>Store Manager, Lakeside Market · Mikkeli</span></span>
+            </figcaption>
+          </div>
+          <div class="quote-side" aria-label="What partner stores notice">
+            <div class="quote-metric"><div class="v">Fewer interruptions</div><div class="l">Staff spend less time answering “where can I find…?”</div></div>
+            <div class="quote-metric"><div class="v">Returning shoppers</div><div class="l">Customers who couldn’t shop alone before now come back</div></div>
+            <div class="quote-metric"><div class="v">Easy onboarding</div><div class="l">The GMIP team handles mapping and setup</div></div>
+          </div>
+        </figure>
+
+        <div class="quote-grid">
+          <figure class="quote-card" style="margin:0">
+            <div class="stars" aria-label="5 out of 5 stars">
+              <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
+            </div>
+            <blockquote>“My eyesight isn’t what it used to be, and small labels were impossible. Now my phone tells me where to go and buzzes when I’m at the right shelf. I do my own shopping again, and I’m proud of that.”</blockquote>
+            <figcaption class="quote-person">
+              <span class="avatar" aria-hidden="true">EK</span>
+              <span><strong>Eila K., 78</strong><span>Retired teacher · GMIP shopper</span></span>
+            </figcaption>
+          </figure>
+          <figure class="quote-card" style="margin:0">
+            <div class="stars" aria-label="5 out of 5 stars">
+              <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
+            </div>
+            <blockquote>“Independence in everyday tasks matters enormously to the people we work with. GMIP works with screen readers, needs no extra hardware from the shopper, and was tested with real users. We recommend it to our members.”</blockquote>
+            <figcaption class="quote-person">
+              <span class="avatar" aria-hidden="true">MH</span>
+              <span><strong>Mikko Hakala</strong><span>Accessibility Advisor, regional association for the visually impaired</span></span>
+            </figcaption>
+          </figure>
+        </div>
+        <p class="sample-note">Sample testimonials for this concept demo. Names, store and quotes are illustrative.</p>
+      </div>
+    </section>
+
+    <!-- ================= TEAM ================= -->
+    <section class="section section-blush" id="team" aria-labelledby="team-title">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker">The team</span>
+          <h2 class="section-title" id="team-title">The people <span class="soft">behind GMIP.</span></h2>
+          <p class="section-lead">A team of students at Xamk Mikkeli, building accessible retail technology.</p>
+        </div>
+        <div class="team-grid">
+          <article class="member"><span class="avatar" aria-hidden="true">PD</span><h3>Paul Simon Dittert</h3><p>Student</p></article>
+          <article class="member"><span class="avatar" aria-hidden="true">DR</span><h3>Dainius Rainys</h3><p>Student</p></article>
+          <article class="member"><span class="avatar" aria-hidden="true">OM</span><h3>Oskaras Muzikevičius</h3><p>Student</p></article>
+          <article class="member"><span class="avatar" aria-hidden="true">SR</span><h3>Skirmantas Rakauskas</h3><p>Student</p></article>
+          <article class="member"><span class="avatar" aria-hidden="true">VS</span><h3>Vilius Smilga</h3><p>Student</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="container contact-grid">
+        <div>
+          <div class="section-head" style="margin-bottom:0">
+            <span class="kicker">Contact us</span>
+            <h2 class="section-title" id="contact-title">Let’s make your store <span class="soft">accessible.</span></h2>
+            <p class="section-lead">Tell us about your store or chain. We’ll reply within two working days to arrange a demo call.</p>
+          </div>
+
+          <ul class="contact-list">
+            <li class="contact-item">
+              <span class="ci-icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></span>
+              <div><small>Email</small><a href="mailto:hello@gmip.fi">hello@gmip.fi</a></div>
+            </li>
+            <li class="contact-item">
+              <span class="ci-icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></span>
+              <div><small>Phone</small><a href="tel:+358401234567">+358 40 123 4567</a></div>
+            </li>
+            <li class="contact-item">
+              <span class="ci-icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
+              <div><small>Office</small><address>GMIP · UAB XAMK Motors<br>Xamk Mikkeli Campus<br>Patteristonkatu 3 D, 50100 Mikkeli, Finland</address></div>
+            </li>
+            <li class="contact-item">
+              <span class="ci-icon"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>
+              <div><small>Office hours</small><span style="font-weight:700">Mon–Fri, 9:00–16:00 (EET)</span></div>
+            </li>
+          </ul>
+
+          <div class="map-card">
+            <svg viewBox="0 0 520 220" role="img" aria-label="Simplified map of central Mikkeli showing the Xamk Mikkeli Campus location">
+              <rect width="520" height="220" fill="#FFF4F5"/>
+              <path d="M0 175 C 70 150 120 200 190 185 C 240 175 270 210 300 220 L0 220 Z" fill="#DCE9F5"/>
+              <text x="40" y="205" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#6B8BA8">Lake Saimaa</text>
+              <g stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" fill="none">
+                <path d="M0 70 H520"/><path d="M150 0 V170"/><path d="M360 0 L 420 220"/><path d="M150 120 H520"/>
+              </g>
+              <g stroke="#EBD9DC" stroke-width="1.5" fill="none">
+                <path d="M0 70 H520"/><path d="M150 0 V170"/><path d="M360 0 L 420 220"/><path d="M150 120 H520"/>
+              </g>
+              <g fill="#F3D3D7">
+                <rect x="30" y="18" width="90" height="36" rx="6"/><rect x="175" y="18" width="70" height="36" rx="6"/><rect x="265" y="18" width="80" height="36" rx="6"/>
+                <rect x="175" y="86" width="60" height="22" rx="5"/><rect x="250" y="86" width="90" height="22" rx="5"/><rect x="440" y="18" width="70" height="36" rx="6"/>
+                <rect x="440" y="86" width="70" height="22" rx="5"/><rect x="175" y="138" width="80" height="36" rx="6"/><rect x="440" y="140" width="70" height="50" rx="6"/>
+              </g>
+              <rect x="270" y="138" width="88" height="56" rx="8" fill="#A33542" opacity=".2"/>
+              <text x="40" y="96" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#7A6A6D">Market square ↖</text>
+              <g transform="translate(314 150)">
+                <circle r="26" fill="#6E0010" opacity=".14"/>
+                <path d="M0 -36c-11 0-20 8.7-20 19.5C-20 -2.5 0 14 0 14s20-16.5 20-30.5C20 -27.3 11 -36 0 -36Z" fill="#6E0010"/>
+                <circle cy="-17" r="7" fill="#FFE0E3"/>
+              </g>
+            </svg>
+            <div class="map-card-foot">
+              <div><strong>Xamk Mikkeli Campus</strong><span>About a 10-minute walk from the market square</span></div>
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Patteristonkatu+3+D%2C+50100+Mikkeli" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>Request a partner demo</h3>
+          <p>Fields marked optional can be left empty.</p>
+          <form id="contact-form" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="f-name">Full name</label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name">
+                <span class="field-error" id="e-name">Please enter your name.</span>
+              </div>
+              <div class="field">
+                <label for="f-email">Work email</label>
+                <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email">
+                <span class="field-error" id="e-email">Please enter a valid email address.</span>
+              </div>
+              <div class="field">
+                <label for="f-company">Store or chain</label>
+                <input id="f-company" name="company" type="text" autocomplete="organization" required aria-describedby="e-company">
+                <span class="field-error" id="e-company">Please tell us which store or chain.</span>
+              </div>
+              <div class="field">
+                <label for="f-role">Your role <span class="opt">(optional)</span></label>
+                <input id="f-role" name="role" type="text" autocomplete="organization-title">
+              </div>
+              <div class="field">
+                <label for="f-stores">Number of stores</label>
+                <select id="f-stores" name="stores">
+                  <option>1 store</option><option>2–10 stores</option><option>11–50 stores</option><option>More than 50 stores</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-topic">I’m interested in</label>
+                <select id="f-topic" name="topic">
+                  <option>A partner demo</option><option>A pilot in one store</option><option>Accessibility funding</option><option>Something else</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="f-message">Message <span class="opt">(optional)</span></label>
+                <textarea id="f-message" name="message" placeholder="Tell us about your store, size or questions"></textarea>
+              </div>
+              <label class="consent field" for="f-consent" style="flex-direction:row">
+                <input id="f-consent" name="consent" type="checkbox" required aria-describedby="e-consent">
+                <span>I agree that GMIP may use these details to contact me about my enquiry.
+                  <span class="field-error" id="e-consent">Please tick this box so we can reply.</span></span>
+              </label>
+              <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit">Send request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                <small>Opens your email app with the details filled in.</small>
+              </div>
+            </div>
+          </form>
+          <div class="form-success" id="form-success" role="status" aria-live="polite" tabindex="-1">
+            <svg aria-hidden="true"><use href="#i-check"/></svg>
+            <span>Thank you! Your email app should now open with your request. If it doesn’t, write to us at <a href="mailto:hello@gmip.fi">hello@gmip.fi</a>.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top" aria-label="GMIP, back to top">
+            <svg class="brand-mark" aria-hidden="true"><use href="#logo"/></svg>
+            <span class="brand-text"><span class="brand-name">GMIP</span><span class="brand-tag" style="display:block">Grocery Map for Impaired People</span></span>
+          </a>
+          <p>Accessible in-store navigation for supermarkets. Audio, haptic and visual guidance that helps every shopper find what they need on their own.</p>
+          <div class="footer-cta">
+            <a class="btn btn-sm btn-light" href="#contact">Partner with us</a>
+            <a class="btn btn-sm btn-outline-light" href="#" data-prototype-link>Try the prototype</a>
+          </div>
+        </div>
+        <nav aria-label="Product">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#problem">The problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#benefits">Benefits for stores</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Company">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#partnership">Partnership model</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h4>Get in touch</h4>
+          <address>
+            UAB XAMK Motors<br>
+            Xamk Mikkeli Campus<br>
+            Patteristonkatu 3 D<br>
+            50100 Mikkeli, Finland<br>
+            <a href="mailto:hello@gmip.fi">hello@gmip.fi</a><br>
+            <a href="tel:+358401234567">+358 40 123 4567</a>
+          </address>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> UAB XAMK Motors · GMIP concept demo, student project at Xamk</span>
+        <span class="links"><a href="#top">Back to top ↑</a></span>
+      </div>
+    </div>
+  </footer>
+
+
+  <a class="to-top" href="#top" aria-label="Back to top"><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
