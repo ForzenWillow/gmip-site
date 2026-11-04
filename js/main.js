@@ -9,7 +9,7 @@
    with the attribute  data-prototype-link  will open it.
    Leave it empty ("") to show a "coming soon" message.
    --------------------------------------------------------- */
-const PROTOTYPE_URL = "";
+const PROTOTYPE_URL = "https://gmip-demo.vercel.app/";
 
 /* Where contact-form requests are sent (opens the visitor's email app) */
 const CONTACT_EMAIL = "hello@gmip.fi";

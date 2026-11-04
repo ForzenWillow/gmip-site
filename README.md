@@ -7,13 +7,13 @@ Static landing page for **GMIP (Grocery Map for Impaired People)**, aimed at sup
 - **Online:** push this folder to a GitHub repository and turn on GitHub Pages (Settings → Pages → deploy from the main branch, root folder).
 
 ## Link the prototype
-Open `js/main.js` and paste the prototype's public URL into the first setting:
+The prototype's public URL is configured in the first setting of `js/main.js`:
 
 ```js
-const PROTOTYPE_URL = "https://your-prototype-link";
+const PROTOTYPE_URL = "https://gmip-demo.vercel.app/";
 ```
 
-Every "Try the prototype" button on the page will then open it in a new tab. While it is empty, the buttons show a "coming soon" message.
+Every "Try the prototype" button on the page opens it in a new tab.
 
 ## Animations
 - Hero animates in on load; the map route draws itself and the phone "buzzes" when the shopper reaches the shelf
